@@ -117,3 +117,20 @@ data/
 *.egg-info/
 dist-info/
 wheels/
+# ───────────────────────────────
+# Node / Frontend
+# ───────────────────────────────
+node_modules/
+dist/
+build/
+.cache/
+.next/
+out/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Vite
+vite.config.ts.timestamp*
