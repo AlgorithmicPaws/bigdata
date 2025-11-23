@@ -1,0 +1,201 @@
+.album-detail-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-bottom: 2rem;
+}
+
+.back-button:hover {
+  color: #5568d3;
+}
+
+.album-detail-loading,
+.album-detail-error {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.album-header {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.album-cover-large {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.album-placeholder-large {
+  font-size: 8rem;
+  opacity: 0.5;
+}
+
+.album-header-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.album-type {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #999;
+}
+
+.album-header-info h1 {
+  margin: 0;
+  font-size: 3rem;
+  color: #333;
+  line-height: 1.2;
+}
+
+.artist-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.artist-link:hover {
+  text-decoration: underline;
+}
+
+.album-stats {
+  display: flex;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.album-tracks {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.album-tracks h2 {
+  margin: 0 0 1.5rem 0;
+  color: #333;
+}
+
+.tracks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.track-row {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.track-row:hover {
+  background: #f8f9fa;
+}
+
+.track-number {
+  text-align: center;
+  color: #999;
+  font-weight: 600;
+}
+
+.track-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-name {
+  font-weight: 600;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-name:hover {
+  color: #667eea;
+}
+
+.track-composer {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.85rem;
+  color: #999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track-duration {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.track-price {
+  font-weight: 600;
+  color: #28a745;
+  min-width: 60px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .album-header {
+    grid-template-columns: 1fr;
+  }
+
+  .album-cover-large {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .album-header-info h1 {
+    font-size: 2rem;
+  }
+
+  .track-row {
+    grid-template-columns: 30px 1fr auto;
+    gap: 0.5rem;
+  }
+
+  .track-duration,
+  .track-price {
+    display: none;
+  }
+
+  .track-action {
+    grid-column: 1 / -1;
+  }
+}

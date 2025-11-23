@@ -1,7 +1,7 @@
 import { type FormEvent, useEffect, useState } from "react";
 import type { Customer, Track } from "../api/types";
-import { getCustomers } from "../api/customers";
-import { getTracks } from "../api/tracks";
+import { getCustomers } from "../api/endpoints/customers";
+import { getTracks } from "../api/endpoints/tracks";
 import { registerPurchase } from "../api/purchases";
 
 function NewPurchasePage() {

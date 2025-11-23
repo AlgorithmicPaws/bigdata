@@ -1,25 +1,29 @@
 import { type FormEvent, useEffect, useState } from "react";
-import type { Track, TrackCreate } from "../api/types";
-import { getTracks, createTrack } from "../api/tracks";
+import type { TrackList, TrackDetail } from "../api/types";
+import { getTracks } from "../api/endpoints/tracks";
 
 function TracksPage() {
-  const [tracks, setTracks] = useState<Track[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const [form, setForm] = useState<TrackCreate>({
-    Name: "",
-    Composer: "",
-    UnitPrice: 0.99,
+  const [trackList, setTrackList] = useState<TrackList>({
+    tracks: [],
+    total: 0,
+    page: 1,
+    page_size: 50,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   async function loadTracks() {
     try {
       setLoading(true);
       setError(null);
-      const data = await getTracks();
-      setTracks(data);
+      const data = await getTracks({
+        page,
+        page_size: 50,
+        search: search || undefined,
+      });
+      setTrackList(data);
     } catch (err: any) {
       setError(err.message ?? "Error loading tracks");
     } finally {
@@ -29,25 +33,13 @@ function TracksPage() {
 
   useEffect(() => {
     loadTracks();
-  }, []);
+  }, [page, search]);
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    try {
-      setSaving(true);
-      setError(null);
-      await createTrack({
-        ...form,
-        UnitPrice: Number(form.UnitPrice),
-      });
-      setForm({ Name: "", Composer: "", UnitPrice: 0.99 });
-      await loadTracks();
-    } catch (err: any) {
-      setError(err.message ?? "Error creating track");
-    } finally {
-      setSaving(false);
-    }
-  }
+  // Debounce para el search
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1); // Reset a página 1 al buscar
+  };
 
   return (
     <div className="card">
@@ -57,90 +49,90 @@ function TracksPage() {
           <p className="card-subtitle">Browse and add new songs to the store.</p>
         </div>
         <span className="chip">
-          {tracks.length} track{tracks.length !== 1 && "s"}
+          {trackList.total} track{trackList.total !== 1 && "s"}
         </span>
       </div>
 
-      <div className="split-layout">
-        {/* Lista */}
-        <div>
-          {loading ? (
-            <p>Loading tracks...</p>
-          ) : error ? (
-            <p className="error-text">{error}</p>
-          ) : (
+      {/* Barra de búsqueda */}
+      <div style={{ padding: "1rem" }}>
+        <input
+          className="form-input"
+          type="text"
+          placeholder="Buscar por nombre..."
+          value={search}
+          onChange={(e) => handleSearchChange(e.target.value)}
+        />
+      </div>
+
+      <div>
+        {loading ? (
+          <p style={{ padding: "1rem" }}>Loading tracks...</p>
+        ) : error ? (
+          <p className="error-text" style={{ padding: "1rem" }}>{error}</p>
+        ) : (
+          <>
             <table className="table">
               <thead>
                 <tr>
                   <th>ID</th>
                   <th>Name</th>
+                  <th>Artist</th>
+                  <th>Album</th>
+                  <th>Genre</th>
                   <th>Composer</th>
+                  <th>Duration</th>
                   <th>Unit price</th>
                 </tr>
               </thead>
               <tbody>
-                {tracks.map((t) => (
+                {trackList.tracks.map((t: TrackDetail) => (
                   <tr key={t.TrackId}>
                     <td>{t.TrackId}</td>
                     <td>{t.Name}</td>
+                    <td>{t.artist_name || "—"}</td>
+                    <td>{t.album?.Title || "—"}</td>
+                    <td>{t.genre_name || "—"}</td>
                     <td>{t.Composer || "—"}</td>
-                    <td>${t.UnitPrice.toFixed(2)}</td>
+                    <td>
+                      {Math.floor(t.Milliseconds / 60000)}:
+                      {String(Math.floor((t.Milliseconds % 60000) / 1000)).padStart(2, '0')}
+                    </td>
+                    <td>${parseFloat(t.UnitPrice).toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          )}
-        </div>
 
-        {/* Formulario */}
-        <div>
-          <h3 className="card-title" style={{ marginBottom: "0.8rem" }}>
-            New track
-          </h3>
-          <form className="form" onSubmit={handleSubmit}>
-            <div className="form-row">
-              <label className="form-label">Name</label>
-              <input
-                className="form-input"
-                value={form.Name}
-                onChange={(e) => setForm({ ...form, Name: e.target.value })}
-                required
-              />
-            </div>
-
-            <div className="form-row">
-              <label className="form-label">Composer (optional)</label>
-              <input
-                className="form-input"
-                value={form.Composer}
-                onChange={(e) =>
-                  setForm({ ...form, Composer: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="form-row">
-              <label className="form-label">Unit price (USD)</label>
-              <input
-                className="form-input"
-                type="number"
-                min={0}
-                step={0.01}
-                value={form.UnitPrice}
-                onChange={(e) =>
-                  setForm({ ...form, UnitPrice: Number(e.target.value) })
-                }
-                required
-              />
-            </div>
-
-            <button className="btn" type="submit" disabled={saving}>
-              {saving ? "Saving..." : "Save track"}
-            </button>
-
-            {error && <p className="error-text">{error}</p>}
-          </form>
-        </div>
+            {/* Paginación */}
+            {trackList.total > trackList.page_size && (
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                gap: '1rem', 
+                padding: '1rem',
+                alignItems: 'center'
+              }}>
+                <button
+                  className="btn"
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                >
+                  ← Anterior
+                </button>
+                <span>
+                  Página {trackList.page} de {Math.ceil(trackList.total / trackList.page_size)}
+                </span>
+                <button
+                  className="btn"
+                  onClick={() => setPage(p => p + 1)}
+                  disabled={page >= Math.ceil(trackList.total / trackList.page_size)}
+                >
+                  Siguiente →
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

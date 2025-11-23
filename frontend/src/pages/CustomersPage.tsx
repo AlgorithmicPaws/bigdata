@@ -1,4 +1,5 @@
 import { type FormEvent, useEffect, useState } from "react";
+
 import type {
     Customer,
     CustomerCreate,
@@ -8,7 +9,7 @@ import {
   createCustomer,
   getCustomerHistory,
   getCustomers,
-} from "../api/customers";
+} from "../api/endpoints/customers";
 
 function CustomersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
