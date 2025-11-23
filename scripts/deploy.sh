@@ -45,8 +45,9 @@ if [ -d .git ]; then
     git pull origin main || true
 fi
 
-# Construir imagen
-echo -e "${BLUE}🏗️  Construyendo imagen Docker...${NC}"
+# Construir imágenes
+echo -e "${BLUE}🏗️  Construyendo imágenes Docker...${NC}"
+export COMPOSE_HTTP_TIMEOUT=180
 docker-compose -f docker-compose.prod.yml build --no-cache
 
 # Iniciar servicios
@@ -76,26 +77,49 @@ if [ $attempt -eq $max_attempts ]; then
     exit 1
 fi
 
+# Esperar a que el frontend esté listo
+echo -e "${YELLOW}⏳ Esperando a que el frontend esté listo...${NC}"
+attempt=0
+
+while [ $attempt -lt $max_attempts ]; do
+    if curl -f http://localhost/ > /dev/null 2>&1; then
+        echo -e "${GREEN}✅ Frontend está respondiendo!${NC}"
+        break
+    fi
+    attempt=$((attempt + 1))
+    echo "   Intento $attempt/$max_attempts..."
+    sleep 2
+done
+
+if [ $attempt -eq $max_attempts ]; then
+    echo -e "${RED}❌ El frontend no responde después de $max_attempts intentos${NC}"
+    echo ""
+    echo "Mostrando logs:"
+    docker-compose -f docker-compose.prod.yml logs --tail=50 frontend
+    exit 1
+fi
+
 # Obtener IP pública
 PUBLIC_IP=$(curl -s ifconfig.me 2>/dev/null || echo "TU-IP-PUBLICA")
 
 # Mostrar información
 echo ""
 echo -e "${GREEN}╔═══════════════════════════════════════╗${NC}"
-echo -e "${GREEN}║    ✅ Deployment Exitoso!            ║${NC}"
+echo -e "${GREEN}║    ✅ Deployment Exitoso!             ║${NC}"
 echo -e "${GREEN}╚═══════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${BLUE}🌐 URLs:${NC}"
-echo "   API:  http://$PUBLIC_IP:8000"
-echo "   Docs: http://$PUBLIC_IP:8000/docs"
+echo "   Frontend: http://$PUBLIC_IP"
+echo "   API:      http://$PUBLIC_IP:8000"
+echo "   Docs:     http://$PUBLIC_IP:8000/docs"
 echo ""
 echo -e "${BLUE}📊 Comandos útiles:${NC}"
-echo "   Ver logs:      docker-compose -f docker-compose.prod.yml logs -f"
-echo "   Ver estado:    docker-compose -f docker-compose.prod.yml ps"
-echo "   Reiniciar:     docker-compose -f docker-compose.prod.yml restart"
-echo "   Detener:       docker-compose -f docker-compose.prod.yml down"
-echo "   Entrar al container: docker exec -it music_store_backend_prod sh"
+echo "   Ver logs backend:  docker-compose -f docker-compose.prod.yml logs -f backend"
+echo "   Ver logs frontend: docker-compose -f docker-compose.prod.yml logs -f frontend"
+echo "   Ver estado:        docker-compose -f docker-compose.prod.yml ps"
+echo "   Reiniciar:         docker-compose -f docker-compose.prod.yml restart"
+echo "   Detener:           docker-compose -f docker-compose.prod.yml down"
 echo ""
 echo -e "${YELLOW}💡 Tip: Monitorea los logs con:${NC}"
-echo "   docker-compose -f docker-compose.prod.yml logs -f backend"
+echo "   docker-compose -f docker-compose.prod.yml logs -f"
 echo ""
