@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: music_store_backend_dev
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - APP_NAME=${APP_NAME}
+      - DEBUG=${DEBUG:-True}
+    volumes:
+      # Hot reload en desarrollo - los cambios se reflejan sin rebuilds
+      - ./backend/app:/app/app
+    restart: unless-stopped
+    networks:
+      - music_store_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/artists/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Preparado para frontend (descomentar cuando esté listo)
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: music_store_frontend_dev
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend/src:/app/src
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - music_store_network
+
+networks:
+  music_store_network:
+    driver: bridge
