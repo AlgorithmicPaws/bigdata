@@ -1,0 +1,227 @@
+.track-detail-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-bottom: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s;
+}
+
+.back-button:hover {
+  color: #5568d3;
+}
+
+.track-detail-loading,
+.track-detail-error {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.track-detail-content {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 3rem;
+  background: white;
+  border-radius: 12px;
+  padding: 3rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.track-image-large {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.track-placeholder-large {
+  font-size: 8rem;
+  opacity: 0.5;
+}
+
+.track-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.track-header {
+  flex: 1;
+}
+
+.track-type {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #999;
+}
+
+.track-header h1 {
+  margin: 0.5rem 0 1rem 0;
+  font-size: 2.5rem;
+  color: #333;
+  line-height: 1.2;
+}
+
+.track-artists {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.artist-link {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.artist-link:hover {
+  text-decoration: underline;
+}
+
+.track-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.track-price-large {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #28a745;
+  margin: 0;
+}
+
+.track-album-info {
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.track-album-info h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.album-card {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  text-decoration: none;
+  padding: 1rem;
+  background: white;
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+
+.album-card:hover {
+  transform: translateX(5px);
+}
+
+.album-thumb {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.album-title {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  color: #333;
+}
+
+.album-artist {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.track-details h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-weight: 600;
+  color: #333;
+}
+
+@media (max-width: 968px) {
+  .track-detail-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .track-image-large {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .track-header h1 {
+    font-size: 2rem;
+  }
+
+  .track-actions-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+}
