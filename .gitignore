@@ -1,5 +1,53 @@
 # ───────────────────────────────
-# Node / Frontend
+# ARCHIVOS SENSIBLES - NUNCA SUBIR
+# ───────────────────────────────
+.env
+.env.local
+.env.development
+.env.production
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Archivos de credenciales
+credentials.json
+secrets.json
+config.secret.*
+
+# ───────────────────────────────
+# Python / Backend
+# ───────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+*.db
+*.sqlite3
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+.env-backup/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+.hypothesis/
+
+# Logs
+*.log
+logs/
+
+# ───────────────────────────────
+# Node / Frontend (para el futuro)
 # ───────────────────────────────
 node_modules/
 dist/
@@ -17,28 +65,10 @@ pnpm-debug.log*
 vite.config.ts.timestamp*
 
 # ───────────────────────────────
-# Python (por si tienes backend)
+# Docker
 # ───────────────────────────────
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.pdb
-*.pkl
-*.db
-*.sqlite3
-.venv/
-env/
-venv/
-ENV/
-
-# pytest
-.pytest_cache/
-.coverage
-htmlcov/
-
-# FastAPI / Uvicorn
 *.log
+docker-compose.override.yml
 
 # ───────────────────────────────
 # IDE / Editor
@@ -47,31 +77,43 @@ htmlcov/
 .idea/
 *.swp
 *.swo
+*.sublime-*
 
 # ───────────────────────────────
 # Sistema Operativo
 # ───────────────────────────────
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # ───────────────────────────────
 # Archivos temporales
-# ───────────────────────────────s
+# ───────────────────────────────
 *.tmp
 *.temp
 *.bak
-
-# ───────────────────────────────
-# Archivos de producción / despliegue
-# ───────────────────────────────
-.env
-.env.*
-*.pem
-*.crt
-*.key
+*.backup
+*~
 
 # ───────────────────────────────
 # Git
 # ───────────────────────────────
 git-history/
 *.orig
+*.rej
+
+# ───────────────────────────────
+# Datos sensibles / Backups
+# ───────────────────────────────
+*.sql
+*.sql.gz
+*.dump
+backups/
+data/
+
+# ───────────────────────────────
+# Build artifacts
+# ───────────────────────────────
+*.egg-info/
+dist-info/
+wheels/
