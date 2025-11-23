@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { TrackDetail } from '../api/types';
-import type { CartItem, CartState, CartContextType } from '../types/cart';
+import type { CartItem, CartContextType } from '../types/cart';
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 

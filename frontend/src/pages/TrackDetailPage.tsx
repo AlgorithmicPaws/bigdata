@@ -38,10 +38,6 @@ export default function TrackDetailPage() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const formatFileSize = (bytes: number) => {
-    const mb = bytes / (1024 * 1024);
-    return `${mb.toFixed(2)} MB`;
-  };
 
   if (loading) {
     return (

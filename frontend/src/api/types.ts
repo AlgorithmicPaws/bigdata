@@ -285,7 +285,7 @@ export interface HTTPValidationError {
 }
 
 export interface ApiError {
-  detail: string | HTTPValidationError;
+  detail: string;
   status?: number;
   message?: string;
 }

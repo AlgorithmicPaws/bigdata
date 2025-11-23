@@ -208,7 +208,7 @@ const handleSubmitPurchase = async (e: React.FormEvent) => {
                     <label>Teléfono</label>
                     <input
                       type="tel"
-                      value={newCustomer.Phone}
+                      value={newCustomer.Phone || ''}
                       onChange={(e) => setNewCustomer({ ...newCustomer, Phone: e.target.value })}
                       className="form-control"
                     />

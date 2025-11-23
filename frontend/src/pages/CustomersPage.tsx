@@ -227,7 +227,7 @@ function CustomersPage() {
               <label className="form-label">Phone (optional)</label>
               <input
                 className="form-input"
-                value={form.Phone}
+                value={form.Phone || ""}
                 onChange={(e) => setForm({ ...form, Phone: e.target.value })}
               />
             </div>

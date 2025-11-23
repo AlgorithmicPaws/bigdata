@@ -3,7 +3,6 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import { API_CONFIG } from '../config/api.config';
 import type { ApiError } from './types';
 
-// Crear instancia de Axios con configuración base
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   timeout: API_CONFIG.TIMEOUT,
@@ -12,20 +11,11 @@ const axiosInstance: AxiosInstance = axios.create({
   },
 });
 
-// Interceptor de requests (para logging y futuro auth)
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Log para desarrollo
     if (import.meta.env.DEV) {
       console.log(`🔵 API Request: ${config.method?.toUpperCase()} ${config.url}`);
     }
-    
-    // Aquí se puede agregar el token de autenticación en el futuro
-    // const token = getAuthToken();
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
-    
     return config;
   },
   (error) => {
@@ -34,7 +24,6 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Interceptor de responses (para manejo de errores)
 axiosInstance.interceptors.response.use(
   (response) => {
     if (import.meta.env.DEV) {
@@ -48,30 +37,33 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-// Función para transformar errores de Axios a formato estándar
 function handleApiError(error: AxiosError): ApiError {
   if (error.response) {
+    // Convertir el tipo unknown a string seguro
+    const detail = typeof error.response.data === 'string' 
+      ? error.response.data 
+      : JSON.stringify(error.response.data);
+    
     return {
       message: error.message,
       status: error.response.status,
-      detail: error.response.data,
+      detail: detail,
     };
   } else if (error.request) {
     return {
       message: 'No se recibió respuesta del servidor',
       status: 0,
-      detail: error.request,
+      detail: 'Sin respuesta del servidor',
     };
   } else {
     return {
       message: error.message || 'Error desconocido',
       status: 0,
-      detail: null,
+      detail: 'Error desconocido',
     };
   }
 }
 
-// API client con métodos tipados
 export const api = {
   get: <T>(url: string, config?: AxiosRequestConfig) =>
     axiosInstance.get<T>(url, config).then((res) => res.data),

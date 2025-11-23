@@ -17,7 +17,6 @@ services:
       - APP_NAME=${APP_NAME}
       - DEBUG=${DEBUG:-True}
     volumes:
-      # Hot reload en desarrollo - los cambios se reflejan sin rebuilds
       - ./backend/app:/app/app
     restart: unless-stopped
     networks:
@@ -29,20 +28,25 @@ services:
       retries: 3
       start_period: 40s
 
-  # Preparado para frontend (descomentar cuando esté listo)
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   container_name: music_store_frontend_dev
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./frontend/src:/app/src
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - music_store_network
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: music_store_frontend_dev
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - music_store_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
 networks:
   music_store_network:

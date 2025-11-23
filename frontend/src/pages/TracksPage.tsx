@@ -1,6 +1,6 @@
-import { type FormEvent, useEffect, useState } from "react";
+import { useState, useEffect } from 'react';
 import type { TrackList, TrackDetail } from "../api/types";
-import { getTracks } from "../api/endpoints/tracks";
+import { getTracksPaginated } from "../api/endpoints/tracks"; // Cambiar aquí
 
 function TracksPage() {
   const [trackList, setTrackList] = useState<TrackList>({
@@ -18,14 +18,15 @@ function TracksPage() {
     try {
       setLoading(true);
       setError(null);
-      const data = await getTracks({
+      const data = await getTracksPaginated({ // Cambiar aquí
         page,
         page_size: 50,
         search: search || undefined,
       });
-      setTrackList(data);
-    } catch (err: any) {
-      setError(err.message ?? "Error loading tracks");
+      setTrackList(data); // Ahora 'data' es TrackList completo
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Error loading tracks";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -33,12 +34,12 @@ function TracksPage() {
 
   useEffect(() => {
     loadTracks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, search]);
 
-  // Debounce para el search
   const handleSearchChange = (value: string) => {
     setSearch(value);
-    setPage(1); // Reset a página 1 al buscar
+    setPage(1);
   };
 
   return (
@@ -53,7 +54,6 @@ function TracksPage() {
         </span>
       </div>
 
-      {/* Barra de búsqueda */}
       <div style={{ padding: "1rem" }}>
         <input
           className="form-input"
@@ -103,7 +103,6 @@ function TracksPage() {
               </tbody>
             </table>
 
-            {/* Paginación */}
             {trackList.total > trackList.page_size && (
               <div style={{ 
                 display: 'flex', 

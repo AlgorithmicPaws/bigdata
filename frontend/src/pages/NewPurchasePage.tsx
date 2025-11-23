@@ -2,7 +2,7 @@ import { type FormEvent, useEffect, useState } from "react";
 import type { Customer, Track } from "../api/types";
 import { getCustomers } from "../api/endpoints/customers";
 import { getTracks } from "../api/endpoints/tracks";
-import { registerPurchase } from "../api/purchases";
+import { registerPurchase } from "../api/endpoints/purchases";
 
 function NewPurchasePage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -202,7 +202,7 @@ function NewPurchasePage() {
                       </td>
                       <td>{t.Name}</td>
                       <td>{t.Composer || "—"}</td>
-                      <td>${t.UnitPrice.toFixed(2)}</td>
+                      <td>${parseFloat(t.UnitPrice).toFixed(2)}</td>
                     </tr>
                   );
                 })}
